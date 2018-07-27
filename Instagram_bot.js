@@ -8,15 +8,22 @@
 // @grant        none
 // ==/UserScript==
 
-// start and stop by pressing 'Shift+K'
+// start and stop home feed actions by pressing 'Shift+K'
+// start and stop tagged recent posts actions by pressing 'Shift+L'
 (function() {
     'use strict';
 
-    let toggled;
-    let tickInterval;
-    let actionsCounter = 0;
+    let toggled; //current state of the script
+    let tickInterval; // repetiotion interval
+    let actionsCounter = 0; // count number of accomplished actions
+    function writeActionsNumber(){
+      let actionsCount = sessionStorage.getItem('actionsCount');
+      actionsCount = Number(actionsCount) + actionsCounter + 1;
+      sessionStorage.setItem('actionsCount', actionsCount);
+      console.log(`This cycle's count is: ${actionsCount}`);
+    }
     function scrollFeed(interval=1000){
-        let articleElement = document.getElementsByTagName('article')[0];
+        let articleElement = document.getElementsByTagName('article')[0]; // get the first 'article' element
         function moveArticle(){
             articleElement = articleElement.nextElementSibling;
             articleElement.scrollIntoView();
@@ -25,7 +32,11 @@
         return tickInterval;
     }
     function stopScroll(interval){
+        let actionsSoFar = window.sessionStorage.getItem('actionsCount');
+        console.log("Aborting...");
         window.clearInterval(interval);
+        writeActionsNumber();
+        console.log(`${actionsSoFar} accomplished so far`);
     }
     function slideRecentPosts(tag='moscow', interval=1000){
         function startExploring(){
@@ -37,10 +48,6 @@
                     console.log(actionsCounter);
                     if(actionsCounter === 14){
                         stopScroll(tickInterval);
-                        let actionsCount = sessionStorage.getItem('actionsCount');
-                        actionsCount = Number(actionsCount) + actionsCounter + 1;
-                        sessionStorage.setItem('actionsCount', actionsCount);
-                        console.log(`This cycle's count is: ${actionsCount}`);
                         window.location = "https://www.instagram.com/explore/tags/москва";
                     }
                 }
