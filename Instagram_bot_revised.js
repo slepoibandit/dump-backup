@@ -39,9 +39,12 @@
           }
           if (options.comment && completed.comments <= options.orderedTotal) {
             window.setTimeout(options.interval*1000, (e)=>{
-              document.getElementsByClassName('coreSpriteRightPaginationArrow')[0].click();
+              // input comment
               completed.comments = JSON.parse(window.sessionStorage.getItem("completed"))["comments"]++;
               window.sessionStorage.setItem("completed", JSON.stringify(completed));
+              window.setTimeout(options.interval*1000, (e)=>{
+                document.getElementsByClassName('coreSpriteRightPaginationArrow')[0].click();
+              });
             });
           }
           currentStep++;
@@ -65,7 +68,7 @@
       }
     }
     function handleUserOrder(){
-
+      
     }
 
     executeUserOrder();
