@@ -51,11 +51,20 @@
         }
         else if (toggledOn) {
           window.getElementsByTagName("button")[5].click();
-          if (completed.likes*1.5 === options.orderedTotal*1.5 &&
-             completed.follows === options.orderedTotal &&
-             completed.comments === options.orderedTotal) {
+          let orderedOptions = Number(options.like) + Number(options.follow) + Number(options.comment);
+          let completedOptions = 0;
+          if (options.like && comleted.likes === orderedTotal) {
+            completedOptions++;
+          }
+          if (options.follow && comleted.follows === orderedTotal) {
+            completedOptions++;
+          }
+          if (options.comment && comleted.comments === orderedTotal) {
+            completedOptions++;
+          }
+          if (completedOptions === orderedOptions) {
             orderComplete = true;
-            window.sessionStorage.setItem("orderComplete", "true");
+            window.sessionStorage.setItem("orderComplete", true);
           }
           else {
           window.setTimeout(options.interval*1000, (e)=>{window.location.reload();});
@@ -66,9 +75,10 @@
         document.querySelectorAll('div[role=button]')[10].click();
         window.setInterval(options.interval*1000, takeAction);
       }
+      window.addEventListener("storage", (e)=>{executeUserOrder();});
     }
     function handleUserOrder(){
-      
+
     }
 
     executeUserOrder();
